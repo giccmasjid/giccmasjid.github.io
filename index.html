@@ -21,6 +21,46 @@
     <link rel="alternate stylesheet" href="assets/css/colors/color2.css" title="color2" />
     <link rel="alternate stylesheet" href="assets/css/colors/color3.css" title="color3" />
     <link rel="alternate stylesheet" href="assets/css/colors/color4.css" title="color4" />
+    <script>
+        async function updatePrayerTimes() {
+            try {
+                // Fetch the JSON file
+                const response = await fetch('data/pt.json');
+                const prayerData = await response.json();
+
+                // Get today's date in the format "DD-MMM-YY"
+                const today = new Date();
+                // document.getElementById('today').textContent = today.toDateString();
+                const dateString = today.toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: '2-digit'
+                }).replace(/ /g, '-');
+
+                // Get today's prayer times
+                const todayPrayers = prayerData[dateString];
+
+                if (todayPrayers) {
+                    // Update each prayer time in the table
+                    document.getElementById('fajrTime').textContent = todayPrayers.Fajr;
+                    document.getElementById('duhrTime').textContent = todayPrayers.Duhr;
+                    document.getElementById('asrTime').textContent = todayPrayers.Asr;
+                    document.getElementById('magribTime').textContent = todayPrayers.Magrib;
+                    document.getElementById('ishaTime').textContent = todayPrayers.Isha;
+                } else {
+                    console.log('No prayer times found for today');
+                }
+            } catch (error) {
+                console.error('Error fetching prayer times:', error);
+            }
+        }
+
+        // Call the function when the page loads
+        updatePrayerTimes();
+
+        // Optional: Update times every minute
+        setInterval(updatePrayerTimes, 600000);
+    </script>
 </head>
 
 <body>
@@ -222,7 +262,7 @@
                                                         <li class="thm-clr">07/10/2021</li>
                                                         <li>12:00 AM to 02:00 PM</li>
                                                     </ul>
-                                                    <p>Central masque, New town, Las Vegas MuslimHub Center</p>
+                                                    <p>Guildford Islamic Center, Surrey BC</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -239,7 +279,7 @@
                                                         <li class="thm-clr">10/10/2021</li>
                                                         <li>12:00 AM to 02:00 PM</li>
                                                     </ul>
-                                                    <p>Central masque, New town, Las Vegas MuslimHub Center</p>
+                                                    <p>Guildford Islamic Center, Surrey BC</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -252,18 +292,27 @@
                                         <h3>Prayer <span>Times</span></h3>
                                     </div>
                                 </div>
-                                <ul class="prayer-times">
+                                <!-- <ul class="prayer-times">
                                     <li class="pry-tim-hed"><span>Salat</span><span>Start</span><span>Iqamah</span></li>
-                                    <li><span class="thm-clr">Fajar</span><span>03:58 am</span><span>04:45 am</span>
+                                    <li><span class="thm-clr" id="fajrTime">Fajar</span><span>03:58 am</span><span>04:45 am</span>
                                     </li>
                                     <li><span class="thm-clr">Sunrise</span><span>05:31 am</span><span>05:31 am</span>
                                     </li>
-                                    <li><span class="thm-clr">Zuhr</span><span>12:47 pm</span><span>12:47 pm</span></li>
-                                    <li><span class="thm-clr">Asr</span><span>05:53 pm</span><span>05:50 pm</span></li>
-                                    <li><span class="thm-clr">Maghrib</span><span>08:04 pm</span><span>08:04 pm</span>
+                                    <li><span class="thm-clr" id="duhrTime">Zuhr</span><span>12:47 pm</span><span>12:47 pm</span></li>
+                                    <li><span class="thm-clr" id="asrTime">Asr</span><span>05:53 pm</span><span>05:50 pm</span></li>
+                                    <li><span class="thm-clr" id="magribTime">Maghrib</span><span>08:04 pm</span><span>08:04 pm</span>
                                     </li>
-                                    <li><span class="thm-clr">Isha</span><span>09:37 pm</span><span>09:30 pm</span></li>
+                                    <li><span class="thm-clr" id="ishaTime">Isha</span><span>--:--</span><span>09:30 pm</span></li>
                                     <li><span class="thm-clr">Jumu'ah 1</span><span>01:15 pm</span><span>01:15 pm</span>
+                                    </li>
+                                </ul> -->
+                                <ul class="prayer-times">
+                                    <li class="pry-tim-hed"><span>Salat</span><span>Iqamah</span></li>
+                                    <li><span class="thm-clr">Fajar</span><span id="fajrTime">--:--</span></li>
+                                    <li><span class="thm-clr">Zuhr</span><span id="duhrTime">--:--</span></li>
+                                    <li><span class="thm-clr">Asr</span><span id="asrTime">--:--</span></li>
+                                    <li><span class="thm-clr">Maghrib</span><span id="magribTime">--:--</span></li>
+                                    <li><span class="thm-clr">Isha</span><span id="ishaTime">--:--</span></li>
                                     </li>
                                 </ul>
                             </div>
@@ -333,10 +382,7 @@
                                             <h3>Our Center</h3>
                                         </div>
                                     </div>
-                                    <p>Established in 1987 to serve people who are in need of funds or education. We are
-                                        developing dolor sit amet. Click edit button to change this text. I am text
-                                        block. Click edit button to change this text. Lorem ipsum dolor sit amet,
-                                        consectetur adipiscing elit. Ut elit tellus,Consectetur adipiscing elit. </p>
+                                    <p>The necessity of establishing a worship Place in Guildford was felt in June 2008, and with the sincere efforts of a few brothers, a place was in Guildford Library to cater for brothers to attend Jumuah prayers. It was realized that a permanent place was required to have daily prayers establish in the area. Due to increase of members in October 2008 one of the brothers kindly vacated his office situated upstairs at 209-10222 152 Street Surrey and also generously contributed toward the rent. May Allah (SWT) reward him for his generosity. A musallah was established. </p>
                                     <a class="secndry-btn brd-rd40" href="index.html#" title="">Learn More</a>
                                 </div>
                             </div>
@@ -559,7 +605,7 @@
                                 <h3>Newsletter</h3>
                                 <span>Subscribe to our mailing list</span>
                             </div>
-                            <form>
+                            <form id="subscription" method="POST">
                                 <input type="email" placeholder="Enter your email">
                                 <button type="submit">Sign up</button>
                             </form>
@@ -577,8 +623,7 @@
                                 <div class="wdgt-box">
                                     <div class="logo"><a href="index.html" title="Logo"><img
                                                 src="assets/images/gicc-Logo-white.png" alt="logo2.png"></a></div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                        incididunt ut labore et dolore magna aliqua.</p>
+                                    <p>Serving the Muslim community in the area of Guildford, Surrey, British Columbia, Canada.</p>
                                 </div>
                             </div>
                             <div class="col-md-8 col-sm-12 col-lg-8">
@@ -609,7 +654,8 @@
                                         <div class="wdgt-box">
                                             <h4>Contact Us</h4>
                                             <ul class="cont-lst">
-                                                <li><i class="flaticon-location-pin"></i>15290 103A Ave #101 Surrey, BC V3R 7A2, Canada</li>
+                                                <li><i class="flaticon-location-pin"></i>15290 103A Ave #101 Surrey, BC
+                                                    V3R 7A2, Canada</li>
                                                 <li><i class="flaticon-call"></i>+1 (604) 670-6732</li>
                                                 <li><i class="flaticon-email"></i>info@giccmasjid.org</li>
                                             </ul>
@@ -620,7 +666,7 @@
                         </div>
                     </div>
                     <div class="bottom-bar">
-                        <p>&copy; Copyright 2024. All Rights Reserved.</p>
+                        <p>&copy; Copyright 2025. All Rights Reserved.</p>
                         <div class="scl">
                             <a href="index.html#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
                             <a href="index.html#" title="Pinterest" target="_blank"><i
@@ -645,6 +691,67 @@
     <script src="assets/js/owl.carousel.min.js"></script>
     <script src="assets/js/jquery.circliful.min.js"></script>
     <script src="assets/js/custom-scripts.js"></script>
-</body>
 
-</html>
+    <script>
+        document.getElementById("subscription").addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            //   document.getElementById("message").textContent = "Submitting..";
+            //   document.getElementById("message").style.display = "block";
+            //   document.getElementById("subscription-button").disabled = true;
+
+            // Collect the form data
+            var formData = new FormData(this);
+            var keyValuePairs = [];
+            for (var pair of formData.entries()) {
+                keyValuePairs.push(pair[0] + "=" + pair[1]);
+            }
+
+            var formDataString = keyValuePairs.join("&");
+
+            // Send a POST request to your Google Apps Script
+            fetch(
+                "https://script.google.com/macros/s/AKfycbwOBOr8OUFF_LZPDkfinb32DINkDl30pen-S2EUOutlGCaEZdphk9EL9jaALuZmXeAJ/exec",
+                // "https://script.google.com/macros/s/AKfycbx1MCZw-dmiAqav2Wl64Q0Mg4GNcj9y7GpNPhT5WI3CW2lmXq1hPHJWEbUSm-sIclO3/exec",
+                {
+                    redirect: "follow",
+                    method: "POST",
+                    body: formDataString,
+                    headers: {
+                        "Content-Type": "text/plain;charset=utf-8",
+                    },
+                }
+            )
+                .then(function (response) {
+                    // Check if the request was successful
+                    if (response) {
+                        return response; // Assuming your script returns JSON response
+                    } else {
+                        throw new Error("Failed to submit the form.");
+                    }
+                })
+                .then(function (data) {
+                    // Display a success message
+                    document.getElementById("message").textContent =
+                        "Data submitted successfully!";
+                    document.getElementById("message").style.display = "block";
+                    document.getElementById("message").style.backgroundColor = "green";
+                    document.getElementById("message").style.color = "beige";
+                    document.getElementById("submit-button").disabled = false;
+                    document.getElementById("form").reset();
+
+                    setTimeout(function () {
+                        document.getElementById("message").textContent = "";
+                        document.getElementById("message").style.display = "none";
+                    }, 2600);
+                })
+                .catch(function (error) {
+                    // Handle errors, you can display an error message here
+                    console.error(error);
+                    document.getElementById("message").textContent =
+                        "An error occurred while submitting the form.";
+                    document.getElementById("message").style.display = "block";
+                });
+        });
+    </script>
+
+</body>
